@@ -1,289 +1,189 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><style>:root{color-scheme:light dark;padding-top:env(safe-area-inset-top,0px)}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Troy's Pennsport Shortlist</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}</style></head><body><title>Troy's Pennsport Shortlist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Layout: header + clickable status counts, a sticky toolbar (view, sort, filters, search), then cards or a table */
+/* Layout: status summary up top, then numbered listing cards grouped by tier; closed ones sink to the bottom */
 :root{
   --bg:#f4f6f1; --card:#ffffff; --sunk:#eceee8; --ink:#1c231f; --muted:#5b665f; --line:#dbe0d8;
-  --ivy:#2c6646; --ivy-ink:#ffffff; --ivy-soft:#e1eee5; --brick:#a2412c; --brick-soft:#f5e3dd; --amber:#8c600c; --amber-soft:#f4ebd3;
+  --ivy:#2c6646; --ivy-soft:#e1eee5; --brick:#a2412c; --brick-soft:#f5e3dd; --amber:#8c600c; --amber-soft:#f4ebd3;
   --f-display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
   --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#111512; --card:#191f1b; --sunk:#151a17; --ink:#e4eae5; --muted:#98a39c; --line:#2b332e;
-  --ivy:#72c493; --ivy-ink:#0f1a13; --ivy-soft:#1d3226; --brick:#e48a74; --brick-soft:#3a221c; --amber:#e2b75f; --amber-soft:#342a15; color-scheme:dark}}
+  --ivy:#72c493; --ivy-soft:#1d3226; --brick:#e48a74; --brick-soft:#3a221c; --amber:#e2b75f; --amber-soft:#342a15; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111512; --card:#191f1b; --sunk:#151a17; --ink:#e4eae5; --muted:#98a39c; --line:#2b332e;
-  --ivy:#72c493; --ivy-ink:#0f1a13; --ivy-soft:#1d3226; --brick:#e48a74; --brick-soft:#3a221c; --amber:#e2b75f; --amber-soft:#342a15; color-scheme:dark}
+  --ivy:#72c493; --ivy-soft:#1d3226; --brick:#e48a74; --brick-soft:#3a221c; --amber:#e2b75f; --amber-soft:#342a15; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);padding-inline:16px;padding-block:24px 56px;margin:0}
-.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
-h1,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);padding-inline:16px;padding-block:24px 56px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
 h1{font-size:clamp(28px,5vw,40px);line-height:1.05}
-button,select,input{font:inherit;color:inherit}
-button{cursor:pointer}
-:focus-visible{outline:2px solid var(--ivy);outline-offset:2px}
-.intro{display:flex;flex-direction:column;gap:8px;max-width:680px}
+h2{font-size:20px;margin-bottom:12px}
+.intro{display:flex;flex-direction:column;gap:10px;max-width:640px}
 .intro p{margin:0;color:var(--muted)}
 .updated{font:500 12.5px var(--f-mono);color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;max-width:680px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column;align-items:flex-start;gap:0;text-align:left}
-.stat[aria-pressed="true"]{border-color:var(--ivy);box-shadow:inset 0 0 0 1px var(--ivy)}
-.stat b{font:600 22px/1.2 var(--f-mono)}
-.stat span{font-size:12.5px;color:var(--muted)}
-.how{background:var(--ivy-soft);border-radius:10px;padding:10px 14px;font-size:14px;max-width:680px;margin:0}
-.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
-.seg button{border:0;background:transparent;padding:6px 12px;font-size:13.5px}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
-select,input[type=search]{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 9px;font-size:13.5px}
-input[type=search]{flex:1;min-width:150px}
-.chip-btn{border:1px solid var(--line);background:transparent;border-radius:999px;padding:4px 11px;font-size:13px}
-.chip-btn[aria-pressed="true"]{background:var(--ivy);border-color:var(--ivy);color:var(--ivy-ink)}
-.count{font-size:13px;color:var(--muted);margin-left:auto}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:12px}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;gap:8px;align-items:baseline}
+.stat b{font:600 20px var(--f-mono)}
+.stat span{font-size:13px;color:var(--muted)}
+.how{background:var(--ivy-soft);border-radius:10px;padding:12px 14px;font-size:14px;max-width:640px}
+.sub{margin:-6px 0 12px;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .card.closed{opacity:.6}
 .card header{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:start}
-.id{font:600 13px var(--f-mono);color:var(--ivy);background:var(--ivy-soft);border-radius:6px;padding:3px 7px;white-space:nowrap}
+.num{font:600 15px var(--f-mono);color:var(--ivy);padding-top:2px}
+.head{min-width:0}
 .head h3{font-size:17px;line-height:1.25}
 .rent{margin:2px 0 0;font:600 15px var(--f-mono);font-variant-numeric:tabular-nums}
 .rent span{font-weight:400;color:var(--muted);font-size:12px}
-.pills{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:5px}
-.status{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.status{grid-column:1/-1;justify-self:start;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--sunk);color:var(--muted)}
 .s-out,.s-tour{background:var(--amber-soft);color:var(--amber)}
 .s-app,.s-int{background:var(--ivy-soft);color:var(--ivy)}
 .s-closed{background:var(--brick-soft);color:var(--brick)}
-.vote{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px}
-.v-yes{background:var(--ivy);color:var(--ivy-ink)} .v-maybe{background:var(--amber-soft);color:var(--amber)} .v-no{background:var(--brick-soft);color:var(--brick)}
 .chips{display:flex;flex-wrap:wrap;gap:5px}
 .chip{font-size:12.5px;padding:2px 8px;border-radius:6px;background:var(--sunk)}
-.chip.ok{background:var(--ivy-soft);color:var(--ivy)} .chip.miss{background:var(--brick-soft);color:var(--brick)} .chip.warn{background:var(--amber-soft);color:var(--amber)}
-.card p,.detail p{margin:0;font-size:14px}
+.chip.ok{background:var(--ivy-soft);color:var(--ivy)}
+.chip.miss{background:var(--brick-soft);color:var(--brick)}
+.card p{margin:0;font-size:14px}
 .redflag{color:var(--brick)}
+.photo{display:flex;flex-direction:column;gap:6px;border-left:2px solid var(--line);padding-left:10px}
+.chip.warnchip{background:var(--amber-soft);color:var(--amber)}
 .troy{background:var(--ivy-soft);border-radius:8px;padding:6px 9px}
-.photo{border-left:2px solid var(--line);padding-left:10px;display:flex;flex-direction:column;gap:6px}
 .note{color:var(--muted)}
 .log{list-style:none;margin:0;padding:0 0 0 10px;border-left:2px solid var(--line);display:flex;flex-direction:column;gap:3px;font-size:13px}
 .log time{font-family:var(--f-mono);color:var(--muted);margin-right:4px}
 .card footer{margin-top:auto}
-a.link{color:var(--ivy);font-weight:600;font-size:14px;text-decoration:none}
-a.link:hover{text-decoration:underline}
-.tablebox{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}
-table{border-collapse:collapse;width:100%;min-width:960px}
-th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle;font-size:13.5px}
-th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;background:var(--sunk);white-space:nowrap}
-th button{border:0;background:none;padding:0;font:inherit;color:inherit;text-transform:inherit;letter-spacing:inherit}
-th button[data-active="true"]{color:var(--ink)}
-tbody tr.main{cursor:pointer}
-tbody tr.main:hover td{background:var(--sunk)}
-tbody tr.closed td{opacity:.55}
-td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
-td .addr{font-weight:600;min-width:170px}
-.detail td{background:var(--sunk)}
-.detail .inner{display:flex;flex-direction:column;gap:8px;max-width:820px;padding-block:4px}
-.todo{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
-.todo h2{font:600 15px var(--f-body);margin:0;display:flex;gap:8px;align-items:center}
-.todo h2 .n{font:600 12px var(--f-mono);background:var(--amber-soft);color:var(--amber);border-radius:999px;padding:1px 8px}
-.todo ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-.todo li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:baseline;font-size:14px}
-.todo li a{color:inherit;text-decoration:none}
-.todo li a:hover .t{text-decoration:underline}
-.todo .meta,.acts .meta{font-size:12px;color:var(--muted);white-space:nowrap}
-.due-soon{color:var(--amber)!important;font-weight:600}
-.overdue{color:var(--brick)!important;font-weight:600}
-.acts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:14px}
-.acts li{display:flex;gap:8px;align-items:baseline}
-.acts li::before{content:"";flex:none;width:10px;height:10px;border:1.5px solid var(--amber);border-radius:3px;transform:translateY(1px)}
-.acts li.done{color:var(--muted);text-decoration:line-through}
-.acts li.done::before{background:var(--ivy);border-color:var(--ivy)}
-.nextact{font-size:13px}
-.empty{padding:36px 16px;text-align:center;color:var(--muted)}
-.empty button{margin-top:8px;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 12px}
-@media (max-width:560px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.count{margin-left:0;width:100%}}
+.link{color:var(--ivy);font-weight:600;font-size:14px;text-decoration:none}
+.link:hover{text-decoration:underline}
+.link:focus-visible{outline:2px solid var(--ivy);outline-offset:2px;border-radius:4px}
 </style>
 <div class="wrap">
   <div class="intro">
     <h1>Troy's Pennsport Shortlist</h1>
-    <p>Every place being tracked for you, with where things stand. Each one is checked against your must-haves, the listing photos, and for sketchy fees. Listing numbers are permanent IDs, so #3 is always the same place.</p>
-    <span class="updated">Updated Mon Oct 5, 2:50 PM</span>
+    <p>Every place Greg is tracking for you, with where things stand. Each one is checked for a washer/dryer, outdoor space for the garden, and sketchy fees.</p>
+    <span class="updated">Updated Mon Oct 5, 2:55 PM</span>
   </div>
-  <div class="stats" id="stats"></div>
-  <section class="todo" id="todo" hidden></section>
-  <p class="how"><b>Want to weigh in?</b> Reply to the shortlist email using the numbers, like "1 yes, 3 maybe, 9 no." This page updates as things change.</p>
-  <div class="toolbar">
-    <div class="row">
-      <div class="seg" role="group" aria-label="View">
-        <button data-view="cards">Cards</button><button data-view="list">List</button>
-      </div>
-      <label class="sr" for="sort" style="position:absolute;left:-9999px">Sort</label>
-      <select id="sort" aria-label="Sort">
-        <option value="num">Sort: Listing #</option>
-        <option value="fit">Sort: Best fit</option>
-        <option value="priceAsc">Sort: Rent, low to high</option>
-        <option value="priceDesc">Sort: Rent, high to low</option>
-        <option value="avail">Sort: Available soonest</option>
-        <option value="progress">Sort: Furthest along</option>
-        <option value="newest">Sort: Newest added</option>
-      </select>
-      <input type="search" id="q" placeholder="Search address or notes" aria-label="Search">
-    </div>
-    <div class="row" id="filters" role="group" aria-label="Filters">
-      <button class="chip-btn" data-f="outdoor">Private outdoor</button>
-      <button class="chip-btn" data-f="wd">W/D in unit</button>
-      <button class="chip-btn" data-f="parking">Parking listed</button>
-      <button class="chip-btn" data-f="u1800">$1,800 or less</button>
-      <button class="chip-btn" data-f="noflags">No red flags</button>
-      <button class="chip-btn" data-f="yes">Troy said yes</button>
-      <button class="chip-btn" data-f="action">Needs action</button>
-      <span class="count" id="count"></span>
-    </div>
+  <div class="stats">
+    <div class="stat"><b>13</b><span>still in play</span></div>
+    <div class="stat"><b>2</b><span>landlords contacted</span></div>
+    <div class="stat"><b>1</b><span>tours set</span></div>
+    <div class="stat"><b>9</b><span>closed</span></div>
   </div>
-  <div id="out"></div>
+  <p class="how"><b>Want to weigh in?</b> Reply to Greg's email using the numbers, like "1 yes, 3 maybe, 9 no." This page updates as landlords answer and listings change.</p>
+  <section><h2>Best bets</h2><div class="grid"><article class="card" id="n1">
+  <header><span class="num">#1</span><div class="head"><h3>533 Pierce St</h3><p class="rent">$1,850<span>/mo</span></p></div><span class="status s-out">Reached out</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 1,000 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Nov 1</span></div>
+  <p class="troy"><b>You said:</b> yes · Yes, already contacted separately</p><div class="photo"><p><b>From the photos: Mixed condition.</b> Older rowhome that&#x27;s been kept up. The backyard is the real thing: a tree, gravel, stone pavers and planting beds, with room to garden. Kitchen updated maybe 10–15 years ago (white cabinets, granite, glass-tile backsplash, newer gas range). Hardwood floors with some wear, orange-oak closet doors, dated ceiling fans. The bathroom is dated but clean. Washer and dryer are in the unfinished basement.</p><div class=chips><span class="chip warnchip">Dated bathroom</span></div></div><p class="note">Big fan because of a truly massive backyard. (Also listed on HotPads.)</p><ul class="log"><li><time>2026-10-05</time> Troy voted yes; said he already contacted the landlord himself.</li></ul>
+  <footer><a class="link" href="https://hotpads.com/533-pierce-st-philadelphia-pa-19148-1jj3kk5/pad" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n2">
+  <header><span class="num">#2</span><div class="head"><h3>338 Daly St</h3><p class="rent">$1,800<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 2 ba · 1,108 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Nov 10</span></div>
+  <p class="note">Really nice, good price, checks all boxes, but a little further south.</p>
+  <footer><a class="link" href="https://hotpads.com/338-daly-st-philadelphia-pa-19148-ssufna/pad" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n3">
+  <header><span class="num">#3</span><div class="head"><h3>404 Watkins St</h3><p class="rent">$1,700<span>/mo</span></p></div><span class="status s-tour">Tour scheduled</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 810 sq ft</span><span class="chip miss">W/D: Not listed</span><span class="chip ok">Outdoor: Private patio</span><span class="chip ">Available: Oct 9</span></div>
+  <p class="troy"><b>You said:</b> yes · Yes, already contacted separately</p><p class="note">Pretty nice, but a very odd furnished attic. Decent private outdoor patio.</p><ul class="log"><li><time>2026-10-05</time> Troy voted yes; said he already contacted the landlord himself. Laundry not stated: confirm laundry in building (now a must-have).</li></ul>
+  <footer><a class="link" href="https://hotpads.com/404-watkins-st-philadelphia-pa-19148-1jj3jhw/pad" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n4">
+  <header><span class="num">#4</span><div class="head"><h3>210 Pierce St</h3><p class="rent">$2,000<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 1,204 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private patio</span><span class="chip ">Available: Not posted</span></div>
+  <p class="note">This one is pretty dope. Nice, clean, modern, outdoor space.</p>
+  <footer><a class="link" href="https://hotpads.com/210-pierce-st-philadelphia-pa-19148-1jj3hfm/pad" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n14">
+  <header><span class="num">#14</span><div class="head"><h3>521 Cantrell St</h3><p class="rent">$1,700<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1.5 ba · 1,100 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private patio</span><span class="chip ">Available: Now</span></div>
+  <p class="note">Hits every must-have plus central AC, dishwasher and in-unit W/D. Whitman/Pennsport edge, south of Pennsport proper.</p>
+  <footer><a class="link" href="https://www.apartmenthomeliving.com/property-listing/521-Cantrell-St-Philadelphia-PA-19148-35682079" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n15">
+  <header><span class="num">#15</span><div class="head"><h3>120 Sigel St</h3><p class="rent">$1,550<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 1,078 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private patio</span><span class="chip ">Available: Now</span></div>
+  <p class="note">2-level townhome in Pennsport proper at $1,550, private patio, W/D, and pest control included in the rent. Also on Coldwell Banker and ApartmentHomeLiving.</p>
+  <footer><a class="link" href="https://www.apartments.com/120-sigel-st-philadelphia-pa/0tdgc02/" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n16">
+  <header><span class="num">#16</span><div class="head"><h3>310 Gerritt St</h3><p class="rent">$1,700<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 850 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private patio</span><span class="chip ">Available: Now</span></div>
+  <p class="note">House with private rear patio, W/D, dishwasher, hardwood floors, bright bedrooms. Near 3rd &amp; Wharton.</p>
+  <footer><a class="link" href="https://www.apartments.com/310-gerritt-st-philadelphia-pa/j3rh3j5/" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n17">
+  <header><span class="num">#17</span><div class="head"><h3>1628 S 7th St, 1st Floor</h3><p class="rent">$1,450<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 600 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Now</span></div>
+  <p class="note">Cheapest strong fit: $1,450, private backyard, W/D, AC, newly renovated. Small (600 sq ft). Near 7th &amp; Tasker/Morris.</p>
+  <footer><a class="link" href="https://www.apartmenthomeliving.com/property-listing/1628-S-7th-St-Philadelphia-PA-Unit-1st-Floor-19148-17024594" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article></div></section><section><h2>Worth a look</h2><div class="grid"><article class="card" id="n18">
+  <header><span class="num">#18</span><div class="head"><h3>2230 S Reese St</h3><p class="rent">$1,600<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 840 sq ft</span><span class="chip miss">W/D: Not listed</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Now</span></div>
+  <p class="note">Whole house with a sunny yard, half a block from a park. South of Snyder (Whitman). Laundry not mentioned.</p>
+  <footer><a class="link" href="https://www.apartmenthomeliving.com/rentals/2230-S-Reese-St-Philadelphia-PA-19148-2422146" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n19">
+  <header><span class="num">#19</span><div class="head"><h3>1724 S 2nd St, Unit B</h3><p class="rent">$1,850<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1.5 ba · 1,400 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip miss">Outdoor: Unknown</span><span class="chip ">Available: Now</span></div>
+  <p class="note">Big (1,400 sq ft) Pennsport 2nd-floor unit with an office, central AC, W/D. Outdoor space not mentioned. Also on Apartments.com and ApartmentHomeLiving.</p>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-1724-2d-street-2nd-floor/RpyfVqy-8RG_YLC95yLaAw" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n20">
+  <header><span class="num">#20</span><div class="head"><h3>928 E Moyamensing Ave, Unit 1-1</h3><p class="rent">$1,590<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 2 ba · 1,200 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip miss">Outdoor: Unknown</span><span class="chip ">Available: Now</span></div>
+  <p class="note">2BR/2BA in the Lithuanian Hall building near 2nd &amp; Christian. Central AC, newer kitchen. Outdoor space not mentioned. Also on RentCafe.</p>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-928-moyamensing-ave-unit-1/qGY32QagiLm6pQzr4mjbzk" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n21">
+  <header><span class="num">#21</span><div class="head"><h3>215 Fitzwater St, Unit 2C</h3><p class="rent">$1,750<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">1 bd / 1 ba · 600 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private roof deck</span><span class="chip ">Available: Dec 1</span></div>
+  <p class="note">1BR with a private deck in Queen Village (2nd &amp; Fitzwater), central AC. Not available until Dec 1, two weeks after Troy&#x27;s move-out.</p>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-215-fitzwater-street-unit/rYpDV1ZeTjoXJ9Tubda1ER" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article></div></section><section><h2>Long shots</h2><div class="grid"><article class="card" id="n22">
+  <header><span class="num">#22</span><div class="head"><h3>Pierce St (Pennsport, exact number not listed)</h3><p class="rent">$1,550<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba</span><span class="chip miss">W/D: None</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Now</span></div>
+  <p class="note">$1,550 2BR in Pennsport with a private backyard, but the listing says no laundry, which is one of Troy&#x27;s must-haves. Posted Sept 15.</p>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-charming-apt-available-in/gfjn9xv3wbBYDz6641Ab4z" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article></div></section><section><h2>Closed</h2><p class="sub">Taken by someone else, or ruled out.</p><div class="grid"><article class="card closed" id="n5">
+  <header><span class="num">#5</span><div class="head"><h3>539 McClellan St</h3><p class="rent">$2,400<span>/mo</span></p></div><span class="status s-closed">Passed</span></header>
+  <div class="chips"><span class="chip ">3 bd / 1.5 ba</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Now</span></div>
+  <div class="photo"><p><b>From the photos: New.</b> Brand-new renovation: vinyl plank floors, white shaker kitchen with stainless appliances (protective film still on) and a pot filler, modern bath with large-format tile and a floating wood vanity. The backyard is a modest concrete pad with a new fence, room for raised beds and pots. Unfinished basement with new HVAC and water heater.</p></div><p class="note">Large, looks really nice, has outdoor space, checks all boxes. Expensive. (Also listed on HotPads: hotpads.com/539-mcclellan-st-philadelphia-pa-19148-1jj3knu/pad)</p><ul class="log"><li><time>2026-10-05</time> Passed: $2,400 is over Troy&#x27;s new $2,000 hard cap.</li></ul>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-brandnew-townhouse-in/vu6Cw0y98RGAIfnDgUjtew" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card closed" id="n6">
+  <header><span class="num">#6</span><div class="head"><h3>Near 6th &amp; Cumberland (North Philly)</h3><p class="rent">$1,599<span>/mo</span></p></div><span class="status s-closed">Passed</span></header>
+  <div class="chips"><span class="chip ">2 bd / 2 ba</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private roof deck</span><span class="chip ">Available: Now</span></div>
+  <p class="note">Super narrow, but very new construction with a pretty nice roof deck.</p><ul class="log"><li><time>2026-10-05</time> Passed under new criteria: North Philly, far outside Pennsport, street parking only.</li></ul>
+  <footer><a class="link" href="https://www.facebook.com/marketplace/item/1205282848380754/" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card closed" id="n7">
+  <header><span class="num">#7</span><div class="head"><h3>721 Sigel St</h3><p class="rent">$2,500<span>/mo</span></p></div><span class="status s-closed">Passed</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1.5 ba · 1,150 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Dec 15</span></div>
+  <p class="redflag"><b>Watch out:</b> The photos are screenshots from a real-estate sale listing (Bright MLS watermarks and &quot;1 of 22&quot; counters). Reusing sale-listing photos is a common rental-scam tactic. Confirm the landlord owns the property and see it in person before paying anything.</p><div class="photo"><p><b>From the photos: Renovated.</b> Looks great: exposed brick, white kitchen with stainless appliances, spa-style bath with a freestanding tub and glass shower, finished basement, side-by-side washer/dryer, and a small fenced, paved patio.</p></div><p class="note">Large, looks really nice, has outdoor space, checks all boxes except price.</p><ul class="log"><li><time>2026-10-05</time> Passed: $2,500 is over Troy&#x27;s new $2,000 hard cap (and not available until Dec 15).</li></ul>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-your-new-south-philly-home/ZH9J0AOs8RG5nPNlgh0qJQ" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card closed" id="n8">
+  <header><span class="num">#8</span><div class="head"><h3>9th &amp; Tasker</h3><p class="rent">$1,995<span>/mo</span></p></div><span class="status s-closed">Passed</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 1,075 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip miss">Outdoor: Shared roof deck</span><span class="chip ">Available: Now</span></div>
+  <p class="note">Really spacious modern construction, but the roof deck is shared.</p><ul class="log"><li><time>2026-10-05</time> Passed under new criteria: outdoor space is a shared roof deck (private outdoor now required), and it&#x27;s west of 8th St with street parking only.</li></ul>
+  <footer><a class="link" href="https://www.facebook.com/marketplace/item/38784153554563357/" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card closed" id="n9">
+  <header><span class="num">#9</span><div class="head"><h3>2nd St near Tasker</h3><p class="rent">$1,850<span>/mo</span></p></div><span class="status s-closed">Passed</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 1,100 sq ft</span><span class="chip miss">W/D: Hookups only</span><span class="chip miss">Outdoor: None</span><span class="chip ">Available: Nov 1</span></div>
+  <div class="photo"><p><b>From the photos: Mixed condition.</b> Updated kitchen (gray shaker cabinets, stainless gas range) and vinyl plank downstairs. Bedrooms and stairs are carpeted: the bedroom carpet looks fairly new, the stair carpet looks worn. Dated ceiling fans and light fixtures. The bathroom only shows through a doorway and looks small and basic.</p><div class=chips><span class="chip warnchip">Stair carpet looks worn and dingy</span><span class="chip warnchip">No clear photo of the bathroom</span></div></div><p class="note">Includes off-street parking, but the steps and whole upstairs are carpeted (main living area isn&#x27;t). No outdoor space.</p><ul class="log"><li><time>2026-10-05</time> Passed under new criteria: no outdoor space (private outdoor now required).</li></ul>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-spaciaous-two-bedroom-bi/i4xr7e7WggGW4EPEmkxgxw" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card closed" id="n10">
+  <header><span class="num">#10</span><div class="head"><h3>7th St near Emily St</h3><p class="rent">$1,935<span>/mo</span></p></div><span class="status s-closed">Passed</span></header>
+  <div class="chips"><span class="chip ">3 bd / 1.5 ba · 1,430 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip miss">Outdoor: None</span><span class="chip ">Available: Now</span></div>
+  <p class="redflag"><b>Watch out:</b> Three months&#x27; rent up front ($5,805: first, last, and a one-month deposit). That&#x27;s unusually steep; most Pennsport rentals ask first month plus one deposit.</p><div class="photo"><p><b>From the photos: New.</b> New construction. Hardwood upstairs, tile downstairs; white-and-espresso kitchen with a gas range; new full bath downstairs with a glass shower door. The upstairs half bath looks institutional (grab bars, wall-hung sink). No yard, just a side alley with AC units.</p><div class=chips><span class="chip warnchip">Basement bedrooms have small, high windows</span></div></div><p class="note">New construction, super clean and nice. Higher side of budget but really large.</p><ul class="log"><li><time>2026-10-05</time> Passed under new criteria: no outdoor space (private outdoor now required).</li></ul>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-bi-level-bedroom-15-ba-apt/wpEEYrq1n8eHb8RH541adw" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card closed" id="n11">
+  <header><span class="num">#11</span><div class="head"><h3>1439 S 6th St, Unit 3F</h3><p class="rent">$1,800<span>/mo</span></p></div><span class="status s-closed">Passed</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 750 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip miss">Outdoor: None</span><span class="chip ">Available: Not posted</span></div>
+  <p class="note">No outdoor space, but a nice, modern, clean apartment.</p><ul class="log"><li><time>2026-10-05</time> Passed under new criteria: no outdoor space (private outdoor now required).</li></ul>
+  <footer><a class="link" href="https://hotpads.com/1439-s-6th-st-philadelphia-pa-19147-smwdbz/3f/pad" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card closed" id="n12">
+  <header><span class="num">#12</span><div class="head"><h3>1525 E Moyamensing Ave, Fl 2</h3><p class="rent">$1,235<span>/mo</span></p></div><span class="status s-closed">Passed</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 850 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip miss">Outdoor: None</span><span class="chip ">Available: Not posted</span></div>
+  <p class="redflag"><b>Watch out:</b> Rent is $500–600 below comparable remodeled 2BRs nearby. The photos look real, but verify the landlord and see it in person before paying any fee or deposit.</p><div class="photo"><p><b>From the photos: Renovated.</b> Photos show it lived-in with the current tenant&#x27;s furniture, which suggests the listing is real. Renovated kitchen with a navy island and quartz counters, vinyl plank floors, renovated bath with marble-look tile, stacked washer/dryer in the unit, and bright bedrooms.</p></div><p class="note">Cheap, set up similar to Troy&#x27;s current place.</p><ul class="log"><li><time>2026-10-05</time> Passed under new criteria: no outdoor space (private outdoor now required).</li></ul>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-bed-bath-apartment-for-rent/bwNDDMszPMHuBmnNCDqAgL" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card closed" id="n13">
+  <header><span class="num">#13</span><div class="head"><h3>Wharton St near 3rd</h3><p class="rent">$1,700<span>/mo</span></p></div><span class="status s-closed">Passed</span></header>
+  <div class="chips"><span class="chip ">1 bd / 1 ba · 530 sq ft</span><span class="chip miss">W/D: Shared / coin</span><span class="chip miss">Outdoor: Shared roof deck</span><span class="chip ">Available: Now</span></div>
+  <p class="redflag"><b>Watch out:</b> Application and credit-check fees are mentioned with no amounts. Get the exact cost in writing before applying.</p><div class="photo"><p><b>From the photos: Renovated.</b> Fully renovated inside: gray shaker kitchen, quartz counters, stainless appliances, vinyl plank floors, and a new bath with an LED mirror and marble-look tile. The shared roof deck is big but the boards are weathered. Other tenants already keep chairs and potted plants up there, so planters are probably allowed.</p><div class=chips><span class="chip warnchip">Roof deck boards are weathered</span></div></div><p class="note">Newish construction, nice appliances and bathrooms. Huge roof deck but looks a little worn.</p><ul class="log"><li><time>2026-10-05</time> Passed under new criteria: roof deck is shared (private outdoor now required).</li></ul>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-pennsport-bedroom-bi-level/sh8XUdNCq6K6XXZ9u4FuPU" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article></div></section>
 </div>
-<script type="application/json" id="data">[{"ref": 1, "address": "533 Pierce St", "title": "2 BR townhouse with a lush backyard", "price": 1850, "beds": 2, "baths": 1, "sqft": 1000, "available": "2026-11-01", "outdoor": "private-yard", "outdoorNote": "Real garden yard: a tree, gravel, stone pavers and planting beds", "wd": "in-unit", "laundry": "Washer and dryer in the unfinished basement", "pets": "1 dog + 1 cat allowed", "moveInCost": "$3,750 (first + one-time fees)", "status": "contacted", "tier": "best", "troyVote": "yes", "troyNote": "Yes, already contacted separately", "actions": [{"done": false, "due": "2026-10-07", "id": "a1", "owner": "Troy", "text": "Follow up with the landlord if no reply by Wed Oct 7"}, {"done": false, "due": null, "id": "a2", "owner": "Troy", "text": "Ask about parking (a must-have; not listed)"}], "photoNotes": "Older rowhome that's been kept up. The backyard is the real thing: a tree, gravel, stone pavers and planting beds, with room to garden. Kitchen updated maybe 10–15 years ago (white cabinets, granite, glass-tile backsplash, newer gas range). Hardwood floors with some wear, orange-oak closet doors, dated ceiling fans. The bathroom is dated but clean. Washer and dryer are in the unfinished basement.", "photoFlags": ["Dated bathroom"], "condition": "mixed", "notes": "Big fan because of a truly massive backyard. (Also listed on HotPads.)", "url": "https://hotpads.com/533-pierce-st-philadelphia-pa-19148-1jj3kk5/pad", "source": "hotpads", "addedAt": "2026-10-05T16:40:00Z", "contact": "Porch Life Productions, LLC (no phone listed — HotPads contact form)", "channel": "HotPads contact form", "flags": ["Strong fit: $1,850, 2 BR, private yard, available Nov 1. Someone else contacted it this week, so move quickly."], "log": [{"date": "2026-10-05", "note": "Troy voted yes; said he already contacted the landlord himself."}]}, {"ref": 2, "address": "338 Daly St", "title": "2 BR / 2 full bath rowhome in Whitman", "price": 1800, "beds": 2, "baths": 2, "sqft": 1108, "available": "2026-11-10", "outdoor": "private-yard", "outdoorNote": "\"Cute backyard\" per listing", "wd": "in-unit", "laundry": "In-unit", "pets": "1 cat + 1 small dog", "moveInCost": "$3,600 (first + one-time fee)", "status": "new", "tier": "best", "actions": [{"done": false, "due": "2026-10-07", "id": "a1", "owner": "Troy", "text": "Decide: reach out or pass (available Nov 10)"}, {"done": false, "due": null, "id": "a2", "owner": "Troy", "text": "If reaching out, ask about parking"}], "notes": "Really nice, good price, checks all boxes, but a little further south.", "url": "https://hotpads.com/338-daly-st-philadelphia-pa-19148-ssufna/pad", "source": "hotpads", "addedAt": "2026-10-05T16:40:00Z", "contact": "Property manager · (267) 214-8637", "channel": "Call/text or HotPads contact form", "flags": ["In Whitman, just south of Pennsport. Available Nov 10, which is tight but workable. Someone else contacted it this week."], "log": []}, {"ref": 3, "address": "404 Watkins St", "title": "Renovated 2 BR townhouse with basement", "price": 1700, "beds": 2, "baths": 1, "sqft": 810, "available": "2026-10-09", "outdoor": "private-patio", "outdoorNote": "Decent private patio (from your notes)", "wd": "unknown", "parking": "Parking listed", "pets": "No pets", "moveInCost": "$3,400 (first + one-time fee)", "status": "tour", "tier": "best", "troyVote": "yes", "troyNote": "Yes, already contacted separately", "actions": [{"done": false, "due": "2026-10-06", "id": "a1", "owner": "Troy", "text": "Tour Tue Oct 6 at 11am"}, {"done": false, "due": "2026-10-06", "id": "a2", "owner": "Troy", "text": "Ask where the laundry is (not listed; it must be in the building)"}, {"done": false, "due": "2026-10-06", "id": "a3", "owner": "Troy", "text": "Confirm the $1,700 one-time fee is a refundable security deposit"}, {"done": false, "due": "2026-10-06", "id": "a4", "owner": "Troy", "text": "On the tour, check for mice: droppings, gaps around pipes, gnawed baseboards"}], "notes": "Pretty nice, but a very odd furnished attic. Decent private outdoor patio.", "url": "https://hotpads.com/404-watkins-st-philadelphia-pa-19148-1jj3jhw/pad", "source": "hotpads", "addedAt": "2026-10-05T16:40:00Z", "contact": "Coldwell Banker Realty · (215) 495-2348", "channel": "Call/text or HotPads contact form", "flags": ["Confirm the $1,700 'one-time fee' is a refundable deposit.", "Laundry not listed. Troy now requires laundry in the building; ask."], "log": [{"date": "2026-10-05", "note": "Troy voted yes; said he already contacted the landlord himself. Laundry not stated: confirm laundry in building (now a must-have)."}]}, {"ref": 4, "address": "210 Pierce St", "title": "2 BR house, new LVP and bath", "price": 2000, "beds": 2, "baths": 1, "sqft": 1204, "outdoor": "private-patio", "outdoorNote": "Outdoor space (from your notes; confirm type)", "wd": "in-unit", "laundry": "In-unit", "pets": "No pets", "utilities": "Electric and gas not included", "moveInCost": "$4,000 (first + one-time fee)", "status": "new", "tier": "best", "actions": [{"done": false, "due": "2026-10-07", "id": "a1", "owner": "Troy", "text": "Decide: reach out or pass"}, {"done": false, "due": null, "id": "a2", "owner": "Troy", "text": "If reaching out, confirm there's private outdoor space and ask about parking and move-in date"}], "notes": "This one is pretty dope. Nice, clean, modern, outdoor space.", "url": "https://hotpads.com/210-pierce-st-philadelphia-pa-19148-1jj3hfm/pad", "source": "hotpads", "addedAt": "2026-10-05T16:40:00Z", "contact": "Property manager · (215) 360-2455", "channel": "Call/text or HotPads contact form", "flags": ["No availability date posted and no pets allowed. Outdoor space isn't described in the listing text, so ask about it."], "log": []}, {"ref": 5, "address": "539 McClellan St", "title": "Brand-new 3 BR townhouse", "price": 2400, "beds": 3, "baths": 1.5, "available": "now", "outdoor": "private-yard", "outdoorNote": "Concrete backyard pad, roughly 15x15 ft, with a new wood fence", "wd": "in-unit", "laundry": "W/D in basement", "parking": "Street", "pets": "Cats, small dogs (pet deposit)", "utilities": "Water, sewer", "moveInCost": "$2,400 deposit + first month", "status": "passed", "tier": "maybe", "photoNotes": "Brand-new renovation: vinyl plank floors, white shaker kitchen with stainless appliances (protective film still on) and a pot filler, modern bath with large-format tile and a floating wood vanity. The backyard is a modest concrete pad with a new fence, room for raised beds and pots. Unfinished basement with new HVAC and water heater.", "condition": "new", "notes": "Large, looks really nice, has outdoor space, checks all boxes. Expensive. (Also listed on HotPads: hotpads.com/539-mcclellan-st-philadelphia-pa-19148-1jj3knu/pad)", "url": "https://www.craigslist.org/view/d/philadelphia-brandnew-townhouse-in/vu6Cw0y98RGAIfnDgUjtew", "source": "craigslist", "addedAt": "2026-10-05T16:40:00Z", "contact": "TurboTenant: rental.turbotenant.com/p/539-mcclellan-street-philadelphia-pa/c42aee0f-f1e9-434e-b2ad-db0bb30d10b6", "channel": "TurboTenant contact form", "flags": ["The backyard is freshly cemented, so a garden would mean raised beds or containers. $200 over the target ceiling."], "log": [{"date": "2026-10-05", "note": "Passed: $2,400 is over Troy's new $2,000 hard cap."}]}, {"ref": 6, "address": "Near 6th & Cumberland (North Philly)", "title": "New-construction 2 BR / 2 BA with private rooftop", "price": 1599, "beds": 2, "baths": 2, "available": "now", "outdoor": "private-deck", "outdoorNote": "Private rooftop", "wd": "in-unit", "laundry": "W/D provided", "parking": "Street", "pets": "Dogs and cats OK", "utilities": "Water", "moveInCost": "Description says \"only two months to move in\" (likely first + deposit; confirm)", "status": "passed", "tier": "long", "notes": "Super narrow, but very new construction with a pretty nice roof deck.", "url": "https://www.facebook.com/marketplace/item/1205282848380754/", "source": "facebook", "addedAt": "2026-10-05T16:40:00Z", "contact": "Eli Goldenberg (FB seller, highly rated)", "channel": "Messenger", "flags": ["Not in Pennsport. Facebook places it near 6th & Cumberland in North Philadelphia, about 4 miles north. The low price makes sense for that area."], "log": [{"date": "2026-10-05", "note": "Passed under new criteria: North Philly, far outside Pennsport, street parking only."}]}, {"ref": 7, "address": "721 Sigel St", "title": "2 BR townhouse with basement", "price": 2500, "beds": 2, "baths": 1.5, "sqft": 1150, "available": "2026-12-15", "outdoor": "private-yard", "outdoorNote": "Outdoor area (size not stated)", "wd": "in-unit", "laundry": "W/D in unit", "pets": "Large & small dogs, cats", "utilities": "Water", "moveInCost": "$2,500 deposit + first month", "status": "passed", "tier": "maybe", "redFlags": ["The photos are screenshots from a real-estate sale listing (Bright MLS watermarks and \"1 of 22\" counters). Reusing sale-listing photos is a common rental-scam tactic. Confirm the landlord owns the property and see it in person before paying anything."], "photoNotes": "Looks great: exposed brick, white kitchen with stainless appliances, spa-style bath with a freestanding tub and glass shower, finished basement, side-by-side washer/dryer, and a small fenced, paved patio.", "condition": "renovated", "notes": "Large, looks really nice, has outdoor space, checks all boxes except price.", "url": "https://www.craigslist.org/view/d/philadelphia-your-new-south-philly-home/ZH9J0AOs8RG5nPNlgh0qJQ", "source": "craigslist", "addedAt": "2026-10-05T16:40:00Z", "contact": "TurboTenant: rental.turbotenant.com/p/721-sigel-st-philadelphia-pa/054ce7e3-f686-4892-8457-9119e4862de5", "channel": "TurboTenant contact form", "flags": ["Not available until Dec 15, about a month after Troy needs to be out. Worth asking whether it can open earlier.", "$2,500 is $300 over the target ceiling."], "log": [{"date": "2026-10-05", "note": "Passed: $2,500 is over Troy's new $2,000 hard cap (and not available until Dec 15)."}]}, {"ref": 8, "address": "9th & Tasker", "title": "Passyunk 2 BR with shared furnished roof deck", "price": 1995, "beds": 2, "baths": 1, "sqft": 1075, "available": "now", "outdoor": "shared-deck", "outdoorNote": "Shared, furnished roof deck; secure-entry building", "wd": "in-unit", "laundry": "W/D in unit", "parking": "Street", "pets": "Dogs and cats OK", "status": "passed", "tier": "best", "notes": "Really spacious modern construction, but the roof deck is shared.", "url": "https://www.facebook.com/marketplace/item/38784153554563357/", "source": "facebook", "addedAt": "2026-10-05T16:40:00Z", "contact": "Andrew Porter (FB seller)", "channel": "Messenger", "flags": ["In budget with W/D and pets OK, but the roof deck is shared. Ask whether tenants can keep planters up there. Includes a basement storage unit."], "log": [{"date": "2026-10-05", "note": "Passed under new criteria: outdoor space is a shared roof deck (private outdoor now required), and it's west of 8th St with street parking only."}]}, {"ref": 9, "address": "2nd St near Tasker", "title": "Bi-level 2 BR with off-street parking", "price": 1850, "beds": 2, "baths": 1, "sqft": 1100, "available": "2026-11-01", "outdoor": "none", "outdoorNote": "No outdoor space", "wd": "hookups", "laundry": "W/D hookups only; Troy would need to supply machines", "parking": "Off-street", "pets": "Small pets considered", "status": "passed", "tier": "long", "photoNotes": "Updated kitchen (gray shaker cabinets, stainless gas range) and vinyl plank downstairs. Bedrooms and stairs are carpeted: the bedroom carpet looks fairly new, the stair carpet looks worn. Dated ceiling fans and light fixtures. The bathroom only shows through a doorway and looks small and basic.", "photoFlags": ["Stair carpet looks worn and dingy", "No clear photo of the bathroom"], "condition": "mixed", "notes": "Includes off-street parking, but the steps and whole upstairs are carpeted (main living area isn't). No outdoor space.", "url": "https://www.craigslist.org/view/d/philadelphia-spaciaous-two-bedroom-bi/i4xr7e7WggGW4EPEmkxgxw", "source": "craigslist", "addedAt": "2026-10-05T16:40:00Z", "contact": "215-858-4506 (call to schedule)", "channel": "Phone call or text", "flags": ["Landlord only takes calls for showings. Available Nov 1, which fits the timeline."], "log": [{"date": "2026-10-05", "note": "Passed under new criteria: no outdoor space (private outdoor now required)."}]}, {"ref": 10, "address": "7th St near Emily St", "title": "Bi-level 3 BR, new construction", "price": 1935, "beds": 3, "baths": 1.5, "sqft": 1430, "available": "now", "outdoor": "none", "outdoorNote": "None mentioned in listing", "wd": "in-unit", "laundry": "W/D in unit", "parking": "Street", "pets": "Cats and dogs OK", "utilities": "Trash only", "moveInCost": "$5,805 (first, last, 1 mo deposit)", "status": "passed", "tier": "long", "redFlags": ["Three months' rent up front ($5,805: first, last, and a one-month deposit). That's unusually steep; most Pennsport rentals ask first month plus one deposit."], "photoNotes": "New construction. Hardwood upstairs, tile downstairs; white-and-espresso kitchen with a gas range; new full bath downstairs with a glass shower door. The upstairs half bath looks institutional (grab bars, wall-hung sink). No yard, just a side alley with AC units.", "photoFlags": ["Basement bedrooms have small, high windows"], "condition": "new", "notes": "New construction, super clean and nice. Higher side of budget but really large.", "url": "https://www.craigslist.org/view/d/philadelphia-bi-level-bedroom-15-ba-apt/wpEEYrq1n8eHb8RH541adw", "source": "craigslist", "addedAt": "2026-10-05T16:40:00Z", "contact": "Craigslist reply button", "channel": "Craigslist reply", "flags": ["Two of the three bedrooms are on the basement level, and no outdoor space is mentioned. Move-in is 3 months' rent up front ($5,805)."], "log": [{"date": "2026-10-05", "note": "Passed under new criteria: no outdoor space (private outdoor now required)."}]}, {"ref": 11, "address": "1439 S 6th St, Unit 3F", "title": "New 2 BR condo, Dickinson Square West", "price": 1800, "beds": 2, "baths": 1, "sqft": 750, "outdoor": "none", "outdoorNote": "No outdoor space (from your notes)", "wd": "in-unit", "laundry": "In-unit", "pets": "Cats, small dogs", "moveInCost": "$3,600 (first + one-time fee)", "status": "passed", "tier": "long", "notes": "No outdoor space, but a nice, modern, clean apartment.", "url": "https://hotpads.com/1439-s-6th-st-philadelphia-pa-19147-smwdbz/3f/pad", "source": "hotpads", "addedAt": "2026-10-05T16:40:00Z", "contact": "No phone listed — HotPads contact form", "channel": "HotPads contact form", "flags": ["No outdoor space and no availability date posted."], "log": [{"date": "2026-10-05", "note": "Passed under new criteria: no outdoor space (private outdoor now required)."}]}, {"ref": 12, "address": "1525 E Moyamensing Ave, Fl 2", "title": "Remodeled 2 BR across from Dickinson Square", "price": 1235, "beds": 2, "baths": 1, "sqft": 850, "outdoor": "none", "outdoorNote": "None mentioned in listing", "wd": "in-unit", "laundry": "Stacked washer/dryer in the unit (seen in photos)", "parking": "Off-street", "pets": "Cats and dogs OK", "status": "passed", "tier": "long", "redFlags": ["Rent is $500–600 below comparable remodeled 2BRs nearby. The photos look real, but verify the landlord and see it in person before paying any fee or deposit."], "photoNotes": "Photos show it lived-in with the current tenant's furniture, which suggests the listing is real. Renovated kitchen with a navy island and quartz counters, vinyl plank floors, renovated bath with marble-look tile, stacked washer/dryer in the unit, and bright bedrooms.", "condition": "renovated", "notes": "Cheap, set up similar to Troy's current place.", "url": "https://www.craigslist.org/view/d/philadelphia-bed-bath-apartment-for-rent/bwNDDMszPMHuBmnNCDqAgL", "source": "craigslist", "addedAt": "2026-10-05T16:40:00Z", "contact": "Craigslist reply button", "channel": "Craigslist reply", "flags": ["No outdoor space or availability date listed, and it was posted Sept 10, so confirm it's still open."], "log": [{"date": "2026-10-05", "note": "Passed under new criteria: no outdoor space (private outdoor now required)."}]}, {"ref": 13, "address": "Wharton St near 3rd", "title": "1 BR bi-level in a triplex", "price": 1700, "beds": 1, "baths": 1, "sqft": 530, "available": "now", "outdoor": "shared-deck", "outdoorNote": "Large common roof deck shared by all tenants", "wd": "shared", "laundry": "Coin W/D in basement", "parking": "Street", "pets": "No pets", "utilities": "Water", "status": "passed", "tier": "long", "redFlags": ["Application and credit-check fees are mentioned with no amounts. Get the exact cost in writing before applying."], "photoNotes": "Fully renovated inside: gray shaker kitchen, quartz counters, stainless appliances, vinyl plank floors, and a new bath with an LED mirror and marble-look tile. The shared roof deck is big but the boards are weathered. Other tenants already keep chairs and potted plants up there, so planters are probably allowed.", "photoFlags": ["Roof deck boards are weathered"], "condition": "renovated", "notes": "Newish construction, nice appliances and bathrooms. Huge roof deck but looks a little worn.", "url": "https://www.craigslist.org/view/d/philadelphia-pennsport-bedroom-bi-level/sh8XUdNCq6K6XXZ9u4FuPU", "source": "craigslist", "addedAt": "2026-10-05T16:40:00Z", "contact": "Craigslist reply button", "channel": "Craigslist reply", "flags": ["Only 1 BR / 530 sq ft, and the listing says the roof deck is a common deck shared by all tenants. No pets."], "log": [{"date": "2026-10-05", "note": "Passed under new criteria: roof deck is shared (private outdoor now required)."}]}]</script>
-<script>
-const D = JSON.parse(document.getElementById('data').textContent);
-const ST = {new:['Not contacted yet',0,'s-new'], interested:['Shortlisted',1,'s-int'], contacted:['Reached out',2,'s-out'], tour:['Tour scheduled',3,'s-tour'], applied:['Applied',4,'s-app'], passed:['Passed',8,'s-closed'], taken:['Taken',9,'s-closed']};
-const OUT = {'private-yard':'Private yard','private-patio':'Private patio','private-deck':'Private roof deck','shared-deck':'Shared roof deck','none':'None','unknown':'Unknown'};
-const WD = {'in-unit':'In unit','hookups':'Hookups only','shared':'Shared / coin','none':'None','unknown':'Not listed'};
-const COND = {new:'New',renovated:'Renovated',updated:'Updated',mixed:'Mixed condition',dated:'Dated'};
-const closed = l => l.status==='passed' || l.status==='taken';
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money = v => typeof v === 'number' ? '$' + v.toLocaleString() : 'TBD';
-const avail = a => { if(!a) return 'Not posted'; if(a==='now') return 'Now'; const d = new Date(a+'T12:00:00'); return isNaN(d) ? a : d.toLocaleDateString(undefined,{month:'short',day:'numeric'}); };
-const availKey = a => a==='now' ? '0000' : (a || '9999');
-const openActs = l => (l.actions||[]).filter(a => !a.done);
-const today = new Date(new Date().toDateString());
-const dueCls = d => { if(!d) return ''; const x = new Date(d+'T12:00:00'); const days = (x - today)/864e5; return days < 0 ? 'overdue' : days < 2 ? 'due-soon' : ''; };
-const dueTxt = d => { if(!d) return ''; const x = new Date(d+'T12:00:00'); return isNaN(x) ? d : x.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}); };
-const fit = l => ({best:3,maybe:2,long:1}[l.tier]||1) + (l.troyVote==='yes'?2:0) + ((l.outdoor||'').startsWith('private')?1:0) + (l.wd==='in-unit'?.5:0) - (l.redFlags||[]).length;
-
-let S = {view:'cards', sort:'num', status:'active', q:'', f:{}};
-try { const v = localStorage.getItem('troyView'); if (v) S.view = v; } catch(e) {}
-if (location.hash === '#list' || location.hash === '#cards') S.view = location.hash.slice(1);
-
-function visible(){
-  let v = D.filter(l => {
-    if (S.status==='active' && closed(l)) return false;
-    if (S.status==='out' && !['contacted','tour','applied'].includes(l.status)) return false;
-    if (S.status==='tour' && l.status!=='tour') return false;
-    if (S.status==='closed' && !closed(l)) return false;
-    if (S.f.outdoor && !(l.outdoor||'').startsWith('private')) return false;
-    if (S.f.wd && l.wd!=='in-unit') return false;
-    if (S.f.parking && !l.parking) return false;
-    if (S.f.u1800 && !(typeof l.price==='number' && l.price<=1800)) return false;
-    if (S.f.noflags && (l.redFlags||[]).length) return false;
-    if (S.f.yes && l.troyVote!=='yes') return false;
-    if (S.f.action && !openActs(l).length) return false;
-    if (S.q) { const hay = [l.address,l.title,l.notes,l.photoNotes,l.troyNote].join(' ').toLowerCase(); if (!hay.includes(S.q)) return false; }
-    return true;
-  });
-  const n = x => typeof x === 'number' ? x : null;
-  const by = {
-    num:(a,b)=>(a.ref||9999)-(b.ref||9999),
-    fit:(a,b)=>fit(b)-fit(a)||(a.ref-b.ref),
-    priceAsc:(a,b)=>(n(a.price)??9e9)-(n(b.price)??9e9),
-    priceDesc:(a,b)=>(n(b.price)??-1)-(n(a.price)??-1),
-    avail:(a,b)=>availKey(a.available).localeCompare(availKey(b.available)),
-    progress:(a,b)=>((ST[b.status]||ST.new)[1]%8)-((ST[a.status]||ST.new)[1]%8)||(a.ref-b.ref),
-    newest:(a,b)=>String(b.addedAt||'').localeCompare(String(a.addedAt||''))||(b.ref-a.ref),
-  };
-  return v.sort(by[S.sort]);
-}
-
-function pills(l){
-  const st = ST[l.status] || ST.new;
-  return `<span class="status ${st[2]}">${esc(st[0])}</span>${l.troyVote?`<span class="vote v-${esc(l.troyVote)}">Troy: ${esc(l.troyVote)}</span>`:''}`;
-}
-function chips(l){
-  const c = [];
-  c.push([`${l.beds ?? '?'} bd / ${l.baths ?? '?'} ba${l.sqft?` · ${Number(l.sqft).toLocaleString()} sq ft`:''}`, '']);
-  c.push([`W/D: ${WD[l.wd||'unknown']}`, l.wd==='in-unit'?'ok':(l.wd==='unknown'||!l.wd)?'':'warn']);
-  c.push([`Outdoor: ${OUT[l.outdoor||'unknown']}`, (l.outdoor||'').startsWith('private')?'ok':(l.outdoor==='unknown'||!l.outdoor)?'':'miss']);
-  c.push([`Parking: ${l.parking || 'Not listed'}`, l.parking?'':'']);
-  c.push([`Available: ${avail(l.available)}`, '']);
-  return `<div class="chips">${c.map(([t,k])=>`<span class="chip ${k}">${esc(t)}</span>`).join('')}</div>`;
-}
-function body(l){
-  let h = '';
-  if ((l.actions||[]).length) h += `<div><p style="font-weight:600;margin-bottom:4px">To do</p><ul class="acts">${l.actions.map(a=>`<li class="${a.done?'done':''}"><span>${esc(a.text)} <span class="meta ${a.done?'':dueCls(a.due)}">${esc(a.owner||'')}${a.due?' · '+dueTxt(a.due):''}</span></span></li>`).join('')}</ul></div>`;
-  if (l.troyVote || l.troyNote) h += `<p class="troy"><b>You said:</b> ${esc(l.troyVote||'')}${l.troyVote&&l.troyNote?' · ':''}${esc(l.troyNote||'')}</p>`;
-  (l.redFlags||[]).forEach(r => h += `<p class="redflag"><b>Watch out:</b> ${esc(r)}</p>`);
-  if (l.photoNotes) h += `<div class="photo"><p><b>From the photos${COND[l.condition]?': '+COND[l.condition]:''}.</b> ${esc(l.photoNotes)}</p>${(l.photoFlags||[]).length?`<div class="chips">${l.photoFlags.map(x=>`<span class="chip warn">${esc(x)}</span>`).join('')}</div>`:''}</div>`;
-  if (l.notes) h += `<p class="note">${esc(l.notes)}</p>`;
-  if ((l.log||[]).length) h += `<ul class="log">${l.log.map(x=>`<li><time>${esc(x.date)}</time> ${esc(x.note)}</li>`).join('')}</ul>`;
-  return h;
-}
-function cardHTML(l){
-  return `<article class="card${closed(l)?' closed':''}" id="n${esc(l.ref)}">
-    <header><span class="id" title="Permanent listing ID">#${esc(l.ref)}</span><div class="head"><h3>${esc(l.address)}</h3><p class="rent">${money(l.price)}<span>/mo</span></p></div><div class="pills">${pills(l)}</div></header>
-    ${chips(l)}${body(l)}
-    <footer>${l.url?`<a class="link" href="${esc(l.url)}" target="_blank" rel="noopener">See listing ↗</a>`:''}</footer>
-  </article>`;
-}
-const COLS = [['num','#'],['addr','Address'],['priceAsc','Rent'],['','Bd / Ba'],['','Sq ft'],['','Laundry'],['','Outdoor'],['','Parking'],['avail','Available'],['progress','Status'],['','Next action'],['','Flags'],['','']];
-function listHTML(v){
-  const head = COLS.map(([k,t]) => k && k!=='addr' ? `<th><button data-sort="${k}" data-active="${S.sort===k}">${t}${S.sort===k?' ↓':''}</button></th>` : `<th>${t}</th>`).join('');
-  const rows = v.map(l => {
-    const flags = (l.redFlags||[]).length + (l.photoFlags||[]).length;
-    return `<tr class="main${closed(l)?' closed':''}" id="n${esc(l.ref)}" data-ref="${esc(l.ref)}" tabindex="0" aria-expanded="false">
-      <td class="num"><span class="id">#${esc(l.ref)}</span></td>
-      <td><div class="addr">${esc(l.address)}</div></td>
-      <td class="num">${money(l.price)}</td>
-      <td class="num">${l.beds ?? '?'} / ${l.baths ?? '?'}</td>
-      <td class="num">${l.sqft?Number(l.sqft).toLocaleString():'—'}</td>
-      <td>${esc(WD[l.wd||'unknown'])}</td>
-      <td>${esc(OUT[l.outdoor||'unknown'])}</td>
-      <td>${esc(l.parking||'—')}</td>
-      <td class="num">${avail(l.available)}</td>
-      <td><div class="chips">${pills(l)}</div></td>
-      <td class="nextact">${(()=>{const o=openActs(l); return o.length?`${esc(o[0].text)}${o[0].due?` <span class="meta ${dueCls(o[0].due)}">· ${dueTxt(o[0].due)}</span>`:''}${o.length>1?` <span class="meta">+${o.length-1} more</span>`:''}`:'—';})()}</td>
-      <td>${(l.redFlags||[]).length?`<span class="chip miss">${l.redFlags.length} red flag${l.redFlags.length>1?'s':''}</span>`:flags?`<span class="chip warn">${flags} note${flags>1?'s':''}</span>`:'—'}</td>
-      <td>${l.url?`<a class="link" href="${esc(l.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Listing ↗</a>`:''}</td>
-    </tr>
-    <tr class="detail" data-for="${esc(l.ref)}" hidden><td colspan="${COLS.length}"><div class="inner">${l.title?`<p><b>${esc(l.title)}</b></p>`:''}${chips(l)}${body(l) || '<p class="note">No extra notes yet.</p>'}</div></td></tr>`;
-  }).join('');
-  return `<div class="tablebox"><table><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-
-function render(){
-  const act = D.filter(l=>!closed(l)).length, outN = D.filter(l=>['contacted','tour','applied'].includes(l.status)).length,
-        tours = D.filter(l=>l.status==='tour').length, cl = D.filter(closed).length;
-  document.getElementById('stats').innerHTML = [['active',act,'still in play'],['out',outN,'landlords contacted'],['tour',tours,'tours set'],['closed',cl,'closed']]
-    .map(([k,n,t]) => `<button class="stat" data-status="${k}" aria-pressed="${S.status===k}"><b>${n}</b><span>${t}</span></button>`).join('');
-  document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', S.view===b.dataset.view));
-  document.querySelectorAll('[data-f]').forEach(b => b.setAttribute('aria-pressed', !!S.f[b.dataset.f]));
-  document.getElementById('sort').value = S.sort;
-  const all = D.filter(l=>!closed(l)).flatMap(l => openActs(l).map(a => ({...a, l}))).sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')||(a.l.ref-b.l.ref));
-  const todo = document.getElementById('todo');
-  todo.hidden = !all.length;
-  todo.innerHTML = all.length ? `<h2>Needs action <span class="n">${all.length}</span></h2><ul>${all.map(a=>`<li><span class="id">#${esc(a.l.ref)}</span><a href="#n${esc(a.l.ref)}" data-goto="${esc(a.l.ref)}"><span class="t">${esc(a.text)}</span> <span class="meta">· ${esc(a.l.address)}</span></a><span class="meta ${dueCls(a.due)}">${esc(a.owner||'')}${a.due?' · '+dueTxt(a.due):''}</span></li>`).join('')}</ul>` : '';
-  const v = visible();
-  const label = {active:'still in play', out:'contacted', tour:'with tours set', closed:'closed', all:'in total'}[S.status];
-  document.getElementById('count').textContent = `${v.length} listing${v.length===1?'':'s'} ${label}` + (S.status!=='all' ? ' · ' : '');
-  if (S.status!=='all') { const a = document.createElement('button'); a.className='chip-btn'; a.textContent='Show all'; a.dataset.status='all'; document.getElementById('count').appendChild(a); }
-  const outEl = document.getElementById('out');
-  if (!v.length) { outEl.innerHTML = `<div class="empty">No listings match these filters.<br><button data-clear>Clear filters</button></div>`; return; }
-  outEl.innerHTML = S.view==='list' ? listHTML(v) : `<div class="grid">${v.map(cardHTML).join('')}</div>`;
-}
-
-document.addEventListener('click', e => {
-  const g = e.target.closest('[data-goto]');
-  if (g) { e.preventDefault(); const ref = g.dataset.goto; if (S.status!=='all' && closed(D.find(x=>String(x.ref)===ref)||{})) S.status='all'; render(); const el = document.getElementById('n'+ref) || document.querySelector(`tr.main[data-ref="${ref}"]`); if (el) { if (el.matches('tr.main')) { const d=document.querySelector(`tr.detail[data-for="${ref}"]`); d.hidden=false; } el.scrollIntoView({behavior:'smooth',block:'center'}); } return; }
-  const t = e.target.closest('button,tr.main'); if (!t) return;
-  if (t.dataset.view) { S.view = t.dataset.view; try { localStorage.setItem('troyView', S.view); } catch(err) {} history.replaceState(null,'','#'+S.view); return render(); }
-  if (t.dataset.status) { S.status = (S.status===t.dataset.status && t.dataset.status!=='all') ? 'active' : t.dataset.status; return render(); }
-  if (t.dataset.f) { S.f[t.dataset.f] = !S.f[t.dataset.f]; return render(); }
-  if (t.dataset.sort) { S.sort = t.dataset.sort; return render(); }
-  if (t.hasAttribute('data-clear')) { S.f = {}; S.q = ''; S.status = 'all'; document.getElementById('q').value=''; return render(); }
-  if (t.matches('tr.main')) { const d = document.querySelector(`tr.detail[data-for="${t.dataset.ref}"]`); d.hidden = !d.hidden; t.setAttribute('aria-expanded', String(!d.hidden)); }
-});
-document.addEventListener('keydown', e => { if ((e.key==='Enter'||e.key===' ') && e.target.matches('tr.main')) { e.preventDefault(); e.target.click(); } });
-document.getElementById('sort').addEventListener('change', e => { S.sort = e.target.value; render(); });
-let qt; document.getElementById('q').addEventListener('input', e => { clearTimeout(qt); qt = setTimeout(() => { S.q = e.target.value.trim().toLowerCase(); render(); }, 150); });
-render();
-</script>
 </body></html>
