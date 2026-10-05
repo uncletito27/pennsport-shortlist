@@ -136,6 +136,7 @@ td .addr{font-weight:600;min-width:170px}
 .leaflet-popup-content a{color:var(--ivy);font-weight:600}
 .leaflet-container a.leaflet-popup-close-button{color:var(--muted)}
 .leaflet-container{font-family:var(--f-body)}
+.dark-tiles .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.9) saturate(.6)}
 .leaflet-popup-content .meta{font-size:12px;color:var(--muted)}
 @media (max-width:560px){#map{height:270px}}
 @media (max-width:560px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.count{margin-left:0;width:100%}}
@@ -144,7 +145,7 @@ td .addr{font-weight:600;min-width:170px}
   <div class="intro">
     <h1>Troy's Pennsport Shortlist</h1>
     <p>Every place being tracked for you, with where things stand. Each one is checked against your must-haves, the listing photos, and for sketchy fees. Listing numbers are permanent IDs, so #3 is always the same place.</p>
-    <span class="updated">Updated Mon Oct 5, 3:21 PM</span>
+    <span class="updated">Updated Mon Oct 5, 3:25 PM</span>
   </div>
   <section class="mapbox" id="mapbox" aria-label="Map of listings">
     <div class="maphead"><b>Map</b><span id="mapnote"></span>
@@ -346,8 +347,10 @@ function initMap(){
   const box = document.getElementById('mapbox');
   if (!window.L) { box.hidden = true; return; }
   M = L.map('map', {scrollWheelZoom:false}).setView([39.927, -75.153], 15);
-  L.tileLayer(`https://{s}.basemaps.cartocdn.com/${isDark()?'dark_all':'light_all'}/{z}/{x}/{y}{r}.png`, {maxZoom:19, subdomains:'abcd',
-    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(M);
+  // OpenStreetMap's own tiles: open data, no account or API key. Dark mode inverts them with a CSS filter.
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(M);
+  if (isDark()) box.classList.add('dark-tiles');
   layer = L.layerGroup().addTo(M);
   let hidden = false; try { hidden = localStorage.getItem('troyMap') === 'hidden'; } catch(e) {}
   const btn = document.getElementById('maptoggle');
