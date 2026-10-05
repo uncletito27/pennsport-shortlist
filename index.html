@@ -1,0 +1,142 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}</style></head><body><title>Troy's Pennsport Shortlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: status summary up top, then numbered listing cards grouped by tier; closed ones sink to the bottom */
+:root{
+  --bg:#f4f6f1; --card:#ffffff; --sunk:#eceee8; --ink:#1c231f; --muted:#5b665f; --line:#dbe0d8;
+  --ivy:#2c6646; --ivy-soft:#e1eee5; --brick:#a2412c; --brick-soft:#f5e3dd; --amber:#8c600c; --amber-soft:#f4ebd3;
+  --f-display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111512; --card:#191f1b; --sunk:#151a17; --ink:#e4eae5; --muted:#98a39c; --line:#2b332e;
+  --ivy:#72c493; --ivy-soft:#1d3226; --brick:#e48a74; --brick-soft:#3a221c; --amber:#e2b75f; --amber-soft:#342a15; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111512; --card:#191f1b; --sunk:#151a17; --ink:#e4eae5; --muted:#98a39c; --line:#2b332e;
+  --ivy:#72c493; --ivy-soft:#1d3226; --brick:#e48a74; --brick-soft:#3a221c; --amber:#e2b75f; --amber-soft:#342a15; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);padding-inline:16px;padding-block:24px 56px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(28px,5vw,40px);line-height:1.05}
+h2{font-size:20px;margin-bottom:12px}
+.intro{display:flex;flex-direction:column;gap:10px;max-width:640px}
+.intro p{margin:0;color:var(--muted)}
+.updated{font:500 12.5px var(--f-mono);color:var(--muted)}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;gap:8px;align-items:baseline}
+.stat b{font:600 20px var(--f-mono)}
+.stat span{font-size:13px;color:var(--muted)}
+.how{background:var(--ivy-soft);border-radius:10px;padding:12px 14px;font-size:14px;max-width:640px}
+.sub{margin:-6px 0 12px;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card.closed{opacity:.6}
+.card header{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:start}
+.num{font:600 15px var(--f-mono);color:var(--ivy);padding-top:2px}
+.head{min-width:0}
+.head h3{font-size:17px;line-height:1.25}
+.rent{margin:2px 0 0;font:600 15px var(--f-mono);font-variant-numeric:tabular-nums}
+.rent span{font-weight:400;color:var(--muted);font-size:12px}
+.status{grid-column:1/-1;justify-self:start;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+.s-out,.s-tour{background:var(--amber-soft);color:var(--amber)}
+.s-app,.s-int{background:var(--ivy-soft);color:var(--ivy)}
+.s-closed{background:var(--brick-soft);color:var(--brick)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:12.5px;padding:2px 8px;border-radius:6px;background:var(--sunk)}
+.chip.ok{background:var(--ivy-soft);color:var(--ivy)}
+.chip.miss{background:var(--brick-soft);color:var(--brick)}
+.card p{margin:0;font-size:14px}
+.redflag{color:var(--brick)}
+.troy{background:var(--ivy-soft);border-radius:8px;padding:6px 9px}
+.note{color:var(--muted)}
+.log{list-style:none;margin:0;padding:0 0 0 10px;border-left:2px solid var(--line);display:flex;flex-direction:column;gap:3px;font-size:13px}
+.log time{font-family:var(--f-mono);color:var(--muted);margin-right:4px}
+.card footer{margin-top:auto}
+.link{color:var(--ivy);font-weight:600;font-size:14px;text-decoration:none}
+.link:hover{text-decoration:underline}
+.link:focus-visible{outline:2px solid var(--ivy);outline-offset:2px;border-radius:4px}
+</style>
+<div class="wrap">
+  <div class="intro">
+    <h1>Troy's Pennsport Shortlist</h1>
+    <p>Every place Greg is tracking for you, with where things stand. Each one is checked for a washer/dryer, outdoor space for the garden, and sketchy fees.</p>
+    <span class="updated">Updated Mon Oct 5, 1:04 PM</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>13</b><span>still in play</span></div>
+    <div class="stat"><b>0</b><span>landlords contacted</span></div>
+    <div class="stat"><b>0</b><span>tours set</span></div>
+    <div class="stat"><b>0</b><span>closed</span></div>
+  </div>
+  <p class="how"><b>Want to weigh in?</b> Reply to Greg's email using the numbers, like "1 yes, 3 maybe, 9 no." This page updates as landlords answer and listings change.</p>
+  <section><h2>Best bets</h2><div class="grid"><article class="card" id="n1">
+  <header><span class="num">#1</span><div class="head"><h3>533 Pierce St</h3><p class="rent">$1,850<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 1,000 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Nov 1</span></div>
+  <p class="note">Big fan because of a truly massive backyard. They claim 1,000 sq ft, but unsure.</p>
+  <footer><a class="link" href="https://hotpads.com/533-pierce-st-philadelphia-pa-19148-1jj3kk5/pad" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n2">
+  <header><span class="num">#2</span><div class="head"><h3>338 Daly St</h3><p class="rent">$1,800<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 2 ba · 1,108 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Nov 10</span></div>
+  <p class="note">Really nice, good price, checks all boxes, but a little further south.</p>
+  <footer><a class="link" href="https://hotpads.com/338-daly-st-philadelphia-pa-19148-ssufna/pad" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n3">
+  <header><span class="num">#3</span><div class="head"><h3>404 Watkins St</h3><p class="rent">$1,700<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 810 sq ft</span><span class="chip miss">W/D: Not listed</span><span class="chip ok">Outdoor: Private patio</span><span class="chip ">Available: Oct 9</span></div>
+  <p class="note">Pretty nice, but a very odd furnished attic. Decent private outdoor patio.</p>
+  <footer><a class="link" href="https://hotpads.com/404-watkins-st-philadelphia-pa-19148-1jj3jhw/pad" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n4">
+  <header><span class="num">#4</span><div class="head"><h3>210 Pierce St</h3><p class="rent">$2,000<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 1,204 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private patio</span><span class="chip ">Available: Not posted</span></div>
+  <p class="note">This one is pretty dope. Nice, clean, modern, outdoor space.</p>
+  <footer><a class="link" href="https://hotpads.com/210-pierce-st-philadelphia-pa-19148-1jj3hfm/pad" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n8">
+  <header><span class="num">#8</span><div class="head"><h3>9th &amp; Tasker</h3><p class="rent">$1,995<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 1,075 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip miss">Outdoor: Shared roof deck</span><span class="chip ">Available: Now</span></div>
+  <p class="note">Really spacious modern construction, but the roof deck is shared.</p>
+  <footer><a class="link" href="https://www.facebook.com/marketplace/item/38784153554563357/" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article></div></section><section><h2>Worth a look</h2><div class="grid"><article class="card" id="n5">
+  <header><span class="num">#5</span><div class="head"><h3>539 McClellan St</h3><p class="rent">$2,400<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">3 bd / 1.5 ba</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Now</span></div>
+  <p class="note">Large, looks really nice, has outdoor space, checks all boxes. Expensive. (Also listed on HotPads: hotpads.com/539-mcclellan-st-philadelphia-pa-19148-1jj3knu/pad)</p>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-brandnew-townhouse-in/vu6Cw0y98RGAIfnDgUjtew" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n7">
+  <header><span class="num">#7</span><div class="head"><h3>721 Sigel St</h3><p class="rent">$2,500<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1.5 ba · 1,150 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private yard</span><span class="chip ">Available: Dec 15</span></div>
+  <p class="note">Large, looks really nice, has outdoor space, checks all boxes except price.</p>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-your-new-south-philly-home/ZH9J0AOs8RG5nPNlgh0qJQ" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article></div></section><section><h2>Long shots</h2><div class="grid"><article class="card" id="n6">
+  <header><span class="num">#6</span><div class="head"><h3>Near 6th &amp; Cumberland (North Philly)</h3><p class="rent">$1,599<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 2 ba</span><span class="chip ok">W/D: In unit</span><span class="chip ok">Outdoor: Private roof deck</span><span class="chip ">Available: Now</span></div>
+  <p class="note">Super narrow, but very new construction with a pretty nice roof deck.</p>
+  <footer><a class="link" href="https://www.facebook.com/marketplace/item/1205282848380754/" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n9">
+  <header><span class="num">#9</span><div class="head"><h3>2nd St near Tasker</h3><p class="rent">$1,850<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 1,100 sq ft</span><span class="chip miss">W/D: Hookups only</span><span class="chip miss">Outdoor: None</span><span class="chip ">Available: Nov 1</span></div>
+  <p class="note">Includes off-street parking, but the steps and whole upstairs are carpeted (main living area isn&#x27;t). No outdoor space.</p>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-spaciaous-two-bedroom-bi/i4xr7e7WggGW4EPEmkxgxw" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n10">
+  <header><span class="num">#10</span><div class="head"><h3>7th St near Emily St</h3><p class="rent">$1,935<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">3 bd / 1.5 ba · 1,430 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip miss">Outdoor: None</span><span class="chip ">Available: Now</span></div>
+  <p class="redflag"><b>Watch out:</b> Three months&#x27; rent up front ($5,805: first, last, and a one-month deposit). That&#x27;s unusually steep; most Pennsport rentals ask first month plus one deposit.</p><p class="note">New construction, super clean and nice. Higher side of budget but really large.</p>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-bi-level-bedroom-15-ba-apt/wpEEYrq1n8eHb8RH541adw" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n11">
+  <header><span class="num">#11</span><div class="head"><h3>1439 S 6th St, Unit 3F</h3><p class="rent">$1,800<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 750 sq ft</span><span class="chip ok">W/D: In unit</span><span class="chip miss">Outdoor: None</span><span class="chip ">Available: Not posted</span></div>
+  <p class="note">No outdoor space, but a nice, modern, clean apartment.</p>
+  <footer><a class="link" href="https://hotpads.com/1439-s-6th-st-philadelphia-pa-19147-smwdbz/3f/pad" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n12">
+  <header><span class="num">#12</span><div class="head"><h3>1525 E Moyamensing Ave, Fl 2</h3><p class="rent">$1,235<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">2 bd / 1 ba · 850 sq ft</span><span class="chip miss">W/D: Not listed</span><span class="chip miss">Outdoor: None</span><span class="chip ">Available: Not posted</span></div>
+  <p class="redflag"><b>Watch out:</b> Rent is $500–600 below comparable remodeled 2BRs nearby. Could be a deal, but verify the landlord and see the unit in person before paying any fee or deposit.</p><p class="note">Cheap, set up similar to Troy&#x27;s current place.</p>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-bed-bath-apartment-for-rent/bwNDDMszPMHuBmnNCDqAgL" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article><article class="card" id="n13">
+  <header><span class="num">#13</span><div class="head"><h3>Wharton St near 3rd</h3><p class="rent">$1,700<span>/mo</span></p></div><span class="status s-new">Not contacted yet</span></header>
+  <div class="chips"><span class="chip ">1 bd / 1 ba · 530 sq ft</span><span class="chip miss">W/D: Shared / coin</span><span class="chip miss">Outdoor: Shared roof deck</span><span class="chip ">Available: Now</span></div>
+  <p class="redflag"><b>Watch out:</b> Application and credit-check fees are mentioned with no amounts. Get the exact cost in writing before applying.</p><p class="note">Newish construction, nice appliances and bathrooms. Huge roof deck but looks a little worn.</p>
+  <footer><a class="link" href="https://www.craigslist.org/view/d/philadelphia-pennsport-bedroom-bi-level/sh8XUdNCq6K6XXZ9u4FuPU" target="_blank" rel="noopener">See listing ↗</a></footer>
+</article></div></section>
+</div>
+</body></html>
