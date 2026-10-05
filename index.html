@@ -88,10 +88,14 @@ td .addr{font-weight:600;min-width:170px}
 .todo{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .todo h2{font:600 15px var(--f-body);margin:0;display:flex;gap:8px;align-items:center}
 .todo h2 .n{font:600 12px var(--f-mono);background:var(--amber-soft);color:var(--amber);border-radius:999px;padding:1px 8px}
-.todo ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
-.todo li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:baseline;font-size:14px}
-.todo li a{color:inherit;text-decoration:none}
-.todo li a:hover .t{text-decoration:underline}
+.todo .tsub{margin:-4px 0 2px;font-size:13px;color:var(--muted)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:10px}
+.tgroup{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:7px;background:var(--bg);min-width:0}
+.thead{display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none;flex-wrap:wrap}
+.thead:hover .taddr{text-decoration:underline}
+.taddr{font-weight:600;font-size:14.5px;min-width:0}
+.tdue{margin-left:auto;font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+.who{font-size:11.5px;font-weight:600;background:var(--sunk);border-radius:5px;padding:0 5px;margin-right:2px}
 .todo .meta,.acts .meta{font-size:12px;color:var(--muted);white-space:nowrap}
 .due-soon{color:var(--amber)!important;font-weight:600}
 .overdue{color:var(--brick)!important;font-weight:600}
@@ -128,7 +132,7 @@ td .addr{font-weight:600;min-width:170px}
   <div class="intro">
     <h1>Troy's Pennsport Shortlist</h1>
     <p>Every place being tracked for you, with where things stand. Each one is checked against your must-haves, the listing photos, and for sketchy fees. Listing numbers are permanent IDs, so #3 is always the same place.</p>
-    <span class="updated">Updated Mon Oct 5, 3:08 PM</span>
+    <span class="updated">Updated Mon Oct 5, 3:14 PM</span>
   </div>
   <section class="mapbox" id="mapbox" aria-label="Map of listings">
     <div class="maphead"><b>Map</b><span id="mapnote"></span>
@@ -185,6 +189,9 @@ const availKey = a => a==='now' ? '0000' : (a || '9999');
 const openActs = l => (l.actions||[]).filter(a => !a.done);
 const today = new Date(new Date().toDateString());
 const dueCls = d => { if(!d) return ''; const x = new Date(d+'T12:00:00'); const days = (x - today)/864e5; return days < 0 ? 'overdue' : days < 2 ? 'due-soon' : ''; };
+const dueLabel = d => { if(!d) return ''; const x = new Date(d+'T12:00:00'); if (isNaN(x)) return 'Due '+d; const days = Math.floor((x - today)/864e5); const md = x.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}); return days < 0 ? `Overdue (was due ${md})` : days === 0 ? 'Due today' : days === 1 ? 'Due tomorrow' : `Due ${md}`; };
+// To-dos are Troy's by default; only other owners (e.g. Greg) are labeled.
+const who = a => a.owner && a.owner !== 'Troy' ? `<span class="who">${esc(a.owner)}</span>` : '';
 const dueTxt = d => { if(!d) return ''; const x = new Date(d+'T12:00:00'); return isNaN(x) ? d : x.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}); };
 const fit = l => ({best:3,maybe:2,long:1}[l.tier]||1) + (l.troyVote==='yes'?2:0) + ((l.outdoor||'').startsWith('private')?1:0) + (l.wd==='in-unit'?.5:0) - (l.redFlags||[]).length;
 
@@ -236,7 +243,7 @@ function chips(l){
 }
 function body(l){
   let h = '';
-  if ((l.actions||[]).length) h += `<div><p style="font-weight:600;margin-bottom:4px">To do</p><ul class="acts">${l.actions.map(a=>`<li class="${a.done?'done':''}"><span>${esc(a.text)} <span class="meta ${a.done?'':dueCls(a.due)}">${esc(a.owner||'')}${a.due?' · '+dueTxt(a.due):''}</span></span></li>`).join('')}</ul></div>`;
+  if ((l.actions||[]).length) h += `<div><p style="font-weight:600;margin-bottom:4px">To do</p><ul class="acts">${l.actions.map(a=>`<li class="${a.done?'done':''}"><span>${who(a)}${esc(a.text)}${a.due?` <span class="meta ${a.done?'':dueCls(a.due)}">· ${dueLabel(a.due)}</span>`:''}</span></li>`).join('')}</ul></div>`;
   if (l.troyVote || l.troyNote) h += `<p class="troy"><b>You said:</b> ${esc(l.troyVote||'')}${l.troyVote&&l.troyNote?' · ':''}${esc(l.troyNote||'')}</p>`;
   (l.redFlags||[]).forEach(r => h += `<p class="redflag"><b>Watch out:</b> ${esc(r)}</p>`);
   if (l.photoNotes) h += `<div class="photo"><p><b>From the photos${COND[l.condition]?': '+COND[l.condition]:''}.</b> ${esc(l.photoNotes)}</p>${(l.photoFlags||[]).length?`<div class="chips">${l.photoFlags.map(x=>`<span class="chip warn">${esc(x)}</span>`).join('')}</div>`:''}</div>`;
@@ -267,7 +274,7 @@ function listHTML(v){
       <td>${esc(l.parking||'—')}</td>
       <td class="num">${avail(l.available)}</td>
       <td><div class="chips">${pills(l)}</div></td>
-      <td class="nextact">${(()=>{const o=openActs(l); return o.length?`${esc(o[0].text)}${o[0].due?` <span class="meta ${dueCls(o[0].due)}">· ${dueTxt(o[0].due)}</span>`:''}${o.length>1?` <span class="meta">+${o.length-1} more</span>`:''}`:'—';})()}</td>
+      <td class="nextact">${(()=>{const o=openActs(l); return o.length?`${esc(o[0].text)}${o[0].due?` <span class="meta ${dueCls(o[0].due)}">· ${dueLabel(o[0].due)}</span>`:''}${o.length>1?` <span class="meta">+${o.length-1} more</span>`:''}`:'—';})()}</td>
       <td>${(l.redFlags||[]).length?`<span class="chip miss">${l.redFlags.length} red flag${l.redFlags.length>1?'s':''}</span>`:flags?`<span class="chip warn">${flags} note${flags>1?'s':''}</span>`:'—'}</td>
       <td>${l.url?`<a class="link" href="${esc(l.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Listing ↗</a>`:''}</td>
     </tr>
@@ -284,10 +291,12 @@ function render(){
   document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', S.view===b.dataset.view));
   document.querySelectorAll('[data-f]').forEach(b => b.setAttribute('aria-pressed', !!S.f[b.dataset.f]));
   document.getElementById('sort').value = S.sort;
-  const all = D.filter(l=>!closed(l)).flatMap(l => openActs(l).map(a => ({...a, l}))).sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')||(a.l.ref-b.l.ref));
+  const groups = D.filter(l => !closed(l) && openActs(l).length).map(l => { const acts = openActs(l).slice().sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')); return {l, acts, due:(acts.find(a=>a.due)||{}).due||null}; })
+    .sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')||(a.l.ref-b.l.ref));
   const todo = document.getElementById('todo');
-  todo.hidden = !all.length;
-  todo.innerHTML = all.length ? `<h2>Needs action <span class="n">${all.length}</span></h2><ul>${all.map(a=>`<li><span class="id">#${esc(a.l.ref)}</span><a href="#n${esc(a.l.ref)}" data-goto="${esc(a.l.ref)}"><span class="t">${esc(a.text)}</span> <span class="meta">· ${esc(a.l.address)}</span></a><span class="meta ${dueCls(a.due)}">${esc(a.owner||'')}${a.due?' · '+dueTxt(a.due):''}</span></li>`).join('')}</ul>` : '';
+  todo.hidden = !groups.length;
+  const nTodo = groups.reduce((s,g)=>s+g.acts.length,0);
+  todo.innerHTML = groups.length ? `<h2>Needs action <span class="n">${nTodo} to-do${nTodo===1?'':'s'} · ${groups.length} place${groups.length===1?'':'s'}</span></h2><p class="tsub">Grouped by place, soonest deadline first. Click a place to see its details.</p><div class="tgrid">${groups.map(g=>`<div class="tgroup"><a class="thead" href="#n${esc(g.l.ref)}" data-goto="${esc(g.l.ref)}"><span class="id">#${esc(g.l.ref)}</span><span class="taddr">${esc(g.l.address)}</span><span class="tdue ${dueCls(g.due)}">${g.due?dueLabel(g.due):'No deadline'}</span></a><ul class="acts">${g.acts.map(a=>`<li><span>${who(a)}${esc(a.text)}${a.due&&a.due!==g.due?` <span class="meta ${dueCls(a.due)}">· ${dueLabel(a.due)}</span>`:''}</span></li>`).join('')}</ul></div>`).join('')}</div>` : '';
   const v = visible();
   drawMap(v);
   const label = {active:'still in play', out:'contacted', tour:'with tours set', closed:'closed', all:'in total'}[S.status];
